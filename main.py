@@ -62,7 +62,7 @@ class VendingMachine:
 
         # To display list of beverages number, name and price
         for i in self.beverage_items:
-            print(f"Drink No.: {i['DrinkID']}\tName: {i['DrinkName']}\tPrice: {i['DrinkPrice']}")
+            print(f"Drink No.: {i['DrinkID']}\tName: {i['DrinkName']}\tPrice: RM{i['DrinkPrice']}")
 
     # Function to check if drink number exist in the menu
     def select_drink(self, drink_no, paid_amount):
@@ -73,19 +73,24 @@ class VendingMachine:
             print("Invalid Drink No.")
 
     def select_drink_by_id(self, drink_id):
-        for item in self.beverage_items:
-            if item['DrinkID'] == int(drink_id):
-                return item
-        return None
+        try:
+            for item in self.beverage_items:
+                if item['DrinkID'] == int(drink_id):
+                    return item
+        except ValueError:
+            return None
 
     # Function to verify if amount paid is sufficient
     def payment(self, beverage, paid_amount):
-        if paid_amount >= beverage['DrinkPrice']:
-            change_amount = paid_amount - beverage['DrinkPrice']
-            print(f"You have paid for {beverage['DrinkName']}. Your change is RM {int(change_amount)}")
-            self.return_change(change_amount)
-        else:
-            print("Insufficient Amount Paid")
+        try:
+            if paid_amount >= beverage['DrinkPrice']:
+                change_amount = paid_amount - beverage['DrinkPrice']
+                print(f"You have paid for {beverage['DrinkName']}. Your change is RM {int(change_amount)}")
+                self.return_change(change_amount)
+            else:
+                print("Insufficient Amount Paid")
+        except TypeError:
+            print("Invalid note amount. Please enter a valid number.")
 
     # Function to return the least amount of notes back to customer
     def return_change(self, amount):
@@ -101,7 +106,7 @@ class VendingMachine:
         self.main_menu()
 
         userSelection   = input("Select the drink number you want to buy: ")
-        userAmount      = int(input("Insert notes: RM "))
+        userAmount      = input("Insert notes: RM ")
         self.select_drink(userSelection, userAmount)
 
 if __name__ == "__main__":
